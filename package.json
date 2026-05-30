@@ -1,0 +1,13 @@
+{
+  "name": "attendance-tool",
+  "version": "1.0.0",
+  "description": "勤怠詳細作成ツール",
+  "scripts": {
+    "dev": "vite"
+  },
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "vite": "^7.3.1"
+  }
+}

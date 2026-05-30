@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勤怠作成 - 勤怠詳細</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="index.css">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-title" content="運行管理">
+    <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+
+<body>
+    <div class="background-animation"></div>
+
+    <div class="container" id="main-content">
+
+        <!-- ヘッダー -->
+        <header class="header">
+            <nav class="top-nav">
+                <a href="index.html" class="nav-link active">勤怠詳細</a>
+            </nav>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="grid single-column wide-layout">
+            <section class="card glass form-card">
+                <div class="top-right-actions">
+                    <button id="btn-popup" class="btn-icon-text" title="ポップアップで開く">
+                        <svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <polyline points="9 21 3 21 3 15"></polyline>
+                            <line x1="21" y1="3" x2="14" y2="10"></line>
+                            <line x1="3" y1="21" x2="10" y2="14"></line>
+                        </svg>
+                        <span class="label">ポップアップ</span>
+                    </button>
+                    <button id="btn-reset-all" class="btn-icon-text" title="すべてリセット">
+                        <svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                            <path d="M3 3v5h5"></path>
+                        </svg>
+                        <span class="label">リセット</span>
+                    </button>
+                    <button class="btn-theme-toggle" title="完了場所設定" id="btn-settings">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg>
+                    </button>
+                    <button class="btn-theme-toggle" title="テーマ切替" id="theme-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-moon">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sun"
+                            style="display:none;">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="preset-toolbar">
+                    <div class="preset-dropdown" id="preset-dropdown">
+                        <button class="preset-trigger" id="dropdown-trigger">
+                            <span id="current-preset-name">履歴を選択...</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="preset-menu" id="dropdown-menu"></div>
+                    </div>
+                </div>
+
+                <!-- モード切替 + 後半パターン（1行） -->
+                <div class="toolbar-row">
+                    <div class="mode-toggle-bar">
+                        <button class="btn-mode-toggle active" data-mode="normal">通常</button>
+                        <button class="btn-mode-toggle" data-mode="holiday">休日当番</button>
+                    </div>
+                    <div class="pattern-toolbar" id="pattern-toolbar-el">
+                        <span class="pattern-toolbar-label">後半パターン：</span>
+                        <button class="btn-pattern" data-pattern="return">帰社あり</button>
+                        <button class="btn-pattern" data-pattern="chokki">直帰のみ</button>
+                        <button class="btn-pattern" data-pattern="chokki-ot">直帰+残業</button>
+                    </div>
+                </div>
+
+                <!-- 通常フォーム -->
+                <div id="normal-section">
+
+                <!-- 8列グリッド: ラベル2段 + コントロール2段 -->
+                <div class="ctrl-grid">
+
+                    <!-- 行1: メインラベル -->
+                    <div class="lbl main forget-container">
+                        <span>始業</span>
+                        <label class="forget-label"><input type="checkbox" id="start-forget"> 打遅</label>
+                    </div>
+                    <span class="lbl main"></span>
+                    <span class="lbl main">業務</span>
+                    <span class="lbl main">完了場所</span>
+                    <span class="lbl main">帰着</span>
+                    <span class="lbl main"></span>
+                    <span class="lbl main">業務</span>
+                    <div class="lbl main forget-container">
+                        <span>就業</span>
+                        <label class="forget-label"><input type="checkbox" id="end-forget"> 打遅</label>
+                    </div>
+
+
+                    <!-- 行2: セレクト -->
+                    <select id="start-type">
+                        <option value="(出社)">(出社)</option>
+                        <option value="(車出社)">(車出社)</option>
+                        <option value="(早出)">(早出)</option>
+                        <option value="(早直行)">(早直行)</option>
+                        <option value="(直行)">(直行)</option>
+                    </select>
+
+                    <select id="conn-1">
+                        <option value="～">～</option>
+                        <option value="(休5)">(休5)</option>
+                        <option value="(継)">(継)</option>
+                    </select>
+
+                    <select id="middle-type">
+                        <option value="外勤">外勤</option>
+                        <option value="外勤同行">外勤同行</option>
+                        <option value="付帯業務">付帯業務</option>
+                        <option value="MTG">MTG</option>
+                    </select>
+
+                    <select id="middle-type-2">
+                        <!-- JSで動的生成 -->
+                    </select>
+
+                    <select id="return-type">
+                        <option value="(帰社)">(帰社)</option>
+                        <option value="">-</option>
+                    </select>
+
+                    <select id="conn-2">
+                        <option value="(継)">(継)</option>
+                        <option value="(休15)">(休15)</option>
+                        <option value="～">～</option>
+                        <option value="">-</option>
+                    </select>
+
+                    <select id="end-content">
+                        <option value="付帯業務">付帯業務</option>
+                        <option value="MTG">MTG</option>
+                        <option value="">-</option>
+                    </select>
+
+                    <select id="end-type">
+                        <option value="(退社)">(退社)</option>
+                        <option value="(直帰)">(直帰)</option>
+                        <option value="(車持)">(車持)</option>
+                    </select>
+
+                    <!-- 行4: 時刻・件数コントロール -->
+                    <div class="time-ctrl">
+                        <button class="btn-fine btn-time-adj" data-target="start-time"
+                            data-minutes="-1">&lsaquo;</button>
+                        <button class="btn-time-adj" data-target="start-time" data-minutes="-15">&minus;</button>
+                        <input type="time" id="start-time" value="09:00" step="60">
+                        <button class="btn-time-adj" data-target="start-time" data-minutes="15">+</button>
+                        <button class="btn-fine btn-time-adj" data-target="start-time"
+                            data-minutes="1">&rsaquo;</button>
+                    </div>
+
+                    <div class="cell-empty" id="early-break-cell"></div>
+
+                    <select id="visit-count">
+                        <option value="1件">1件</option>
+                        <option value="2件">2件</option>
+                        <option value="3件">3件</option>
+                        <option value="4件">4件</option>
+                        <option value="5件">5件</option>
+                        <option value="6件">6件</option>
+                        <option value="7件">7件</option>
+                        <option value="8件">8件</option>
+                        <option value="">-</option>
+                    </select>
+
+                    <div class="cell-empty"></div>
+
+                    <div class="time-ctrl">
+                        <button class="btn-fine btn-time-adj" data-target="return-time"
+                            data-minutes="-1">&lsaquo;</button>
+                        <button class="btn-time-adj" data-target="return-time" data-minutes="-15">&minus;</button>
+                        <input type="time" id="return-time" value="16:00" step="60">
+                        <button class="btn-time-adj" data-target="return-time" data-minutes="15">+</button>
+                        <button class="btn-fine btn-time-adj" data-target="return-time"
+                            data-minutes="1">&rsaquo;</button>
+                    </div>
+
+                    <div class="cell-empty"></div>
+                    <div class="cell-empty"></div>
+
+                    <div class="time-ctrl">
+                        <button class="btn-fine btn-time-adj" data-target="end-time" data-minutes="-1">&lsaquo;</button>
+                        <button class="btn-time-adj" data-target="end-time" data-minutes="-15">&minus;</button>
+                        <input type="time" id="end-time" value="17:45" step="60">
+                        <button class="btn-time-adj" data-target="end-time" data-minutes="15">+</button>
+                        <button class="btn-fine btn-time-adj" data-target="end-time" data-minutes="1">&rsaquo;</button>
+                    </div>
+
+
+                </div>
+
+                <!-- 結果エリア -->
+                <div class="preview-area">
+                    <div class="result-box" id="result-text" contenteditable="true">...</div>
+                    <div class="preview-actions">
+                        <button class="btn-icon" id="btn-copy-result" title="Copy">Copy</button>
+                        <div class="overtime-group">
+                            <span class="overtime-label">休憩</span>
+                            <div class="overtime-badge" style="background: var(--ot-inactive-bg); color: #94a3b8;">
+                                <span class="ot-part copyable ot-copy-target" id="break-h" title="時間をコピー">0</span>
+                                <span class="ot-sep">:</span>
+                                <span class="ot-part copyable ot-copy-target" id="break-m" title="分をコピー">00</span>
+                            </div>
+                        </div>
+                        <div class="overtime-group">
+                            <span class="overtime-label">実績</span>
+                            <div class="overtime-badge">
+                                <span class="ot-part copyable ot-copy-target" id="ot-actual-h" title="時間をコピー">0</span>
+                                <span class="ot-sep">:</span>
+                                <span class="ot-part copyable ot-copy-target" id="ot-actual-m" title="分をコピー">00</span>
+                            </div>
+                        </div>
+                        <div class="overtime-group">
+                            <span class="overtime-label">申請</span>
+                            <div class="overtime-badge">
+                                <span class="ot-part copyable ot-copy-target" id="ot-round-h" title="時間をコピー">0</span>
+                                <span class="ot-sep">:</span>
+                                <span class="ot-part copyable ot-copy-target" id="ot-round-m" title="分をコピー">00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- 申請リマインダー -->
+                <div id="reminder-area" class="reminder-area"></div>
+
+                </div><!-- /normal-section -->
+
+                <!-- 休日当番フォーム -->
+                <div id="holiday-section" style="display:none;">
+                    <div class="holiday-grid">
+                        <div>
+                            <div class="lbl main">始業</div>
+                            <select id="h-start-type">
+                                <option value="(出社)">(出社)</option>
+                                <option value="(直行)">(直行)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="lbl main">入電時刻</div>
+                            <div class="time-ctrl">
+                                <button class="btn-fine btn-time-adj" data-target="h-call-time" data-minutes="-1">&lsaquo;</button>
+                                <button class="btn-time-adj" data-target="h-call-time" data-minutes="-15">&minus;</button>
+                                <input type="time" id="h-call-time" value="10:00" step="60">
+                                <button class="btn-time-adj" data-target="h-call-time" data-minutes="15">+</button>
+                                <button class="btn-fine btn-time-adj" data-target="h-call-time" data-minutes="1">&rsaquo;</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="lbl main">業務</div>
+                            <select id="h-duty-code">
+                                <option value="FM">FM</option>
+                                <option value="SS">SS</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="lbl main">件数</div>
+                            <select id="h-count">
+                                <option value="1">1件</option>
+                                <option value="2">2件</option>
+                                <option value="3">3件</option>
+                                <option value="4">4件</option>
+                                <option value="5">5件</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="lbl main">完了場所</div>
+                            <select id="h-location"></select>
+                        </div>
+                        <div>
+                            <div class="lbl main">完了時刻</div>
+                            <div class="time-ctrl">
+                                <button class="btn-fine btn-time-adj" data-target="h-end-time" data-minutes="-1">&lsaquo;</button>
+                                <button class="btn-time-adj" data-target="h-end-time" data-minutes="-15">&minus;</button>
+                                <input type="time" id="h-end-time" value="15:00" step="60">
+                                <button class="btn-time-adj" data-target="h-end-time" data-minutes="15">+</button>
+                                <button class="btn-fine btn-time-adj" data-target="h-end-time" data-minutes="1">&rsaquo;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="preview-area" style="margin-top:8px;">
+                        <div class="result-box" id="h-result-text">...</div>
+                        <div class="preview-actions">
+                            <button class="btn-icon" id="h-btn-copy">Copy</button>
+                            <div class="overtime-group">
+                                <span class="overtime-label">申請</span>
+                                <div class="overtime-badge">
+                                    <span id="h-apply-h">0</span>
+                                    <span class="ot-sep">:</span>
+                                    <span id="h-apply-m">00</span>
+                                </div>
+                            </div>
+                            <div class="overtime-group">
+                                <span class="overtime-label">出勤回数</span>
+                                <div class="overtime-badge">
+                                    <span id="h-attendance">0</span>
+                                    <span style="font-size:0.8rem;opacity:0.7;">回</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="h-reminder-area" class="reminder-area"></div>
+                </div><!-- /holiday-section -->
+
+            </section>
+        </main>
+    </div>
+
+    <!-- 設定モーダル -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>完了場所設定</h2>
+                <button id="btn-close-modal" class="btn-close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <!-- タブ切り替え -->
+            <div class="modal-tabs">
+                <button class="tab-btn active" data-tab="location">場所設定</button>
+                <button class="tab-btn" data-tab="system">システム・データ</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- タブ1: 場所設定 -->
+                <div id="tab-location" class="tab-content active">
+                    <section class="setting-group">
+                        <div class="setting-group-title">場所の追加</div>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="input-add-location" class="input-text" placeholder="例: 東京都新宿区"
+                                style="flex: 1;">
+                            <button id="btn-add-location" class="btn-primary" style="padding: 0 20px;">追加</button>
+                        </div>
+                    </section>
+
+                    <section class="setting-group">
+                        <div class="setting-group-title">登録済み場所の一覧</div>
+                        <p class="modal-desc">場所の選択（お気に入り）や削除ができます。</p>
+                        <div id="location-settings-list" class="settings-grid">
+                            <!-- JSで生成 -->
+                        </div>
+                    </section>
+
+                    <section class="setting-group">
+                        <div class="setting-group-title">完了場所の一括登録</div>
+                        <p class="modal-desc">CSVファイルを読み込んで場所を一括設定できます。</p>
+                        <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+                            <input type="file" id="input-import-csv" accept=".csv" style="display: none;">
+                            <button id="btn-import-csv" class="btn-primary"
+                                style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                CSVファイルを選択して登録
+                            </button>
+                            <p style="font-size: 0.75rem; color: var(--text-secondary); text-align: center;">
+                                <a href="sample_location_master.csv" download
+                                    style="color: var(--accent-light); text-decoration: underline;">見本CSVをダウンロード</a>
+                            </p>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- タブ2: システム・データ -->
+                <div id="tab-system" class="tab-content">
+                    <section class="setting-group">
+                        <div class="setting-group-title">括弧の種類</div>
+                        <p class="modal-desc">生成されるテキストの括弧を選択します。</p>
+                        <div style="display: flex; gap: 16px; margin-top: 8px;">
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="radio" name="paren-width" value="full" checked>
+                                <span>全角　<code style="font-size:1em;">（）</code></span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="radio" name="paren-width" value="half">
+                                <span>半角　<code style="font-size:1em;">()</code></span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <section class="setting-group">
+                        <div class="setting-group-title">デフォルト設定</div>
+                        <p class="modal-desc">現在の入力内容（出社、外勤など）を初期値として保存します。</p>
+                        <button id="btn-save-default" class="btn-secondary"
+                            style="width:100%; margin-bottom:8px;">現在の状態をデフォルトに保存</button>
+                        <span id="msg-save-default" class="success-msg"></span>
+                    </section>
+
+                    <section class="setting-group">
+                        <div class="setting-group-title">データ管理</div>
+                        <p class="modal-desc">設定内容をJSONファイルとして個別にバックアップ・復元できます。</p>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="file" id="input-import-config" accept=".json" style="display: none;">
+                            <button id="btn-import-config" class="btn-secondary"
+                                style="flex: 1; border-style: dashed; font-size: 0.85rem;">JSON読込</button>
+                            <button id="btn-save-json" class="btn-secondary"
+                                style="flex: 1; border-style: dashed; font-size: 0.85rem;">JSON保存</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button id="btn-save-settings" class="btn-primary">保存して閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 履歴一覧モーダル -->
+    <div id="history-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>保存履歴一覧</h2>
+                <button id="btn-close-history" class="btn-close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">保存済みの履歴データ一覧です。</p>
+                <div id="history-list" class="history-list-container">
+                    <!-- JSで生成 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-close-history-footer" class="btn-primary">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="index.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered', reg))
+                    .catch(err => console.error('Service Worker registration failed', err));
+            });
+        }
+    </script>
+</body>
+
+</html>
